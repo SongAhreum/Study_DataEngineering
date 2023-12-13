@@ -1,0 +1,49 @@
+{%extends 'base.html'%}
+{%block main_area%}
+  <div class="row my-5">
+  <div class="col">
+  <h1 class="text-center">선형회귀 Test</h1>
+
+  <div class="text-center">
+    <form name="frm">     
+      <div class="input-group">
+        <input class="form-control" placeholder="공부시간" name="hour" type="number" min="0" max="20" />
+        <button class='btn btn-primary'>예상점수</button>
+      </div>
+    </form>
+
+    <div class="text-center">
+      <h3 class="text-center">예상점수는<span id="score">0</span></h3>
+    </div>
+    <img src="/score/linear/graph">
+  </div>
+
+
+  </div>
+  </div>
+  <script>
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        if($(frm.hour).val()==""){
+          alert("공부시간을 입력하세요")
+          $(frm.hour).focus()
+        }
+        getResult();
+    });
+
+    getResult();
+    function getResult(){
+        $.ajax({
+            type:"get",
+            url:"/score/linear",
+            data:{hour:$(frm.hour).val()},
+            dataType:"text",
+            success:function(data){
+                console.log(data);
+                const score = Math.round(parseFloat(data))  
+                $("#score").text(score)          
+            }
+        })
+    }
+</script>
+{%endblock%}
